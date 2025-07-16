@@ -29,8 +29,8 @@ def load_dataset(file_path):
                 current_label = None
     return pd.DataFrame(data, columns=['label', 'sequence'])
 
-df_train = load_dataset("/home/tyshi/齐意萱/跑别人的模型/消融实验W/BETA/unbalanced_train_sequences.txt")
-df_test = load_dataset("/home/tyshi/齐意萱/跑别人的模型/消融实验W/BETA/unbalanced_test_sequences.txt")
+df_train = load_dataset("./BETA/train_sequences.txt")
+df_test = load_dataset("./BETA/test_sequences.txt")
  
 def tokenizer_kmer(sequence, k=1):
     return [sequence[i:i + k] for i in range(len(sequence) - k + 1)]
@@ -40,8 +40,8 @@ df_train['tokens'] = df_train['sequence'].apply(lambda x: " ".join(tokenizer_kme
 df_test['tokens'] = df_test['sequence'].apply(lambda x: " ".join(tokenizer_kmer(x)))
 
 # Save k-mer tokenization and labels to a txt file
-df_train[['label', 'tokens']].to_csv('/home/tyshi/齐意萱/跑别人的模型/消融实验W/BETA/kmer_1_train_tokens_labels.txt', index=False, header=False, sep='\t')
-df_test[['label', 'tokens']].to_csv('/home/tyshi/齐意萱/跑别人的模型/消融实验W/BETA/kmer_1_test_tokens_labels.txt', index=False, header=False, sep='\t')
+df_train[['label', 'tokens']].to_csv('./BETA/kmer_1_train_tokens_labels.txt', index=False, header=False, sep='\t')
+df_test[['label', 'tokens']].to_csv('./BETA/kmer_1_test_tokens_labels.txt', index=False, header=False, sep='\t')
 
 # Print the length of the longest and shortest sequences
 max_length = max(df_train['sequence'].apply(len).max(), df_test['sequence'].apply(len).max())
@@ -208,12 +208,12 @@ for epoch in range(EPOCHS):
 # Saving the best model
 if best_model_state is not None:
     model.load_state_dict(best_model_state)
-    torch.save(model.state_dict(), "/home/tyshi/齐意萱/跑别人的模型/消融实验W/BETA/best_model.pth")
+    torch.save(model.state_dict(), "./BETA/best_model.pth")
     print(f"Best model saved with AUC: {best_auc:.4f}")
 
     # 保存最好的预测结果
     df_best_results = pd.DataFrame(best_results, columns=['True Label', 'Predicted Label', 'Predicted Probability'])
-    df_best_results.to_csv('/home/tyshi/齐意萱/跑别人的模型/消融实验W/BETA/best_predictions_and_labels_unbalance.csv', index=False)
+    df_best_results.to_csv('./best_predictions_and_labels.csv', index=False)
 
     # 绘制ROC曲线
     fpr, tpr, _ = roc_curve([r[0] for r in best_results], [r[2] for r in best_results])  # r[0]是真实标签，r[2]是预测概率
@@ -226,7 +226,7 @@ if best_model_state is not None:
     plt.ylabel('True Positive Rate')
     plt.title('Receiver Operating Characteristic (ROC) Curve')
     plt.legend(loc='lower right')
-    plt.savefig('/home/tyshi/齐意萱/跑别人的模型/消融实验W/BETA/best_roc_curve_unbalance.png')  # 保存ROC曲线为PNG文件
+    plt.savefig('./BETA/best_roc_curve.png')  # 保存ROC曲线为PNG文件
     plt.close()
 
     # 绘制PR曲线
@@ -239,7 +239,7 @@ if best_model_state is not None:
     plt.ylabel('Precision')
     plt.title('Precision-Recall Curve')
     plt.legend(loc='lower left')
-    plt.savefig('/home/tyshi/齐意萱/跑别人的模型/消融实验W/BETA/best_pr_curve_unbalance.png')  # 保存PR曲线为PNG文件
+    plt.savefig('./BETA/best_pr_curve.png')  # 保存PR曲线为PNG文件
     plt.close()
 
     # 打印AUC值
