@@ -22,7 +22,7 @@ python main.py --cell_line <CellLineName>
 其中 <CellLineName> 是 data/ 目录下某一细胞系文件夹的名称（包含两个数据文件）。
 
 ## 数据结构
-- 数据目录：data/，每个细胞系文件夹（如 GM12878/）包含两个文本文件。  
+- 数据目录：data/，每个细胞系文件夹（如 BETA/）包含两个文本文件。  
         train.txt：训练集，每行包含一个序列和对应标签（用空格分隔）。  
         test.txt：测试集，格式同上。  
 - 序列文件假设为 DNA 序列，标签为二分类标签（0 或 1）。  
@@ -35,9 +35,9 @@ python main.py --cell_line <CellLineName>
 - PR 曲线图：<CellLineName>_pr_curve.png  
 
 ## 示例命令
-在示例命令中，将以 GM12878 细胞系为例：
+在示例命令中，将以 BETA 细胞系为例：
 ```
-python main.py --cell_line GM12878
+python main.py --cell_line BETA
 ```
 该命令将依次进行数据加载、超参数调优、模型训练和评估，并将所有输出文件保存到 results/ 目录中。
 
